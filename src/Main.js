@@ -21,7 +21,9 @@ const translateApi = `https://translation.googleapis.com/language/translate/v2?k
   packageJSON.cloudAPI
 }`;
 
-export default class main extends Component<void, *, void> {
+export { default } from './MainScreen';
+
+export class main extends Component<void, *, void> {
   constructor(props) {
     super(props);
     this.state = {
@@ -32,7 +34,6 @@ export default class main extends Component<void, *, void> {
     };
     this.takePicture = this.takePicture.bind(this);
     this.changeLanguage = this.changeLanguage.bind(this);
-    this.toggleLogoVisibility = this.toggleLogoVisibility.bind(this);
     timer.setInterval(this, 'takePicture', () => this.takePicture(), 1000);
     timer.setInterval(this, 'clearInterval', () => this.clearInterval(), 30000);
   }

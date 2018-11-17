@@ -1,10 +1,14 @@
 import axios from 'axios';
+import packageJSON from '../package.json';
 
-export const getTranslatedText = async (
-  cloudVision,
-  targetLanguage,
-  image64,
-) => {
+const cloudVision = `https://vision.googleapis.com/v1/images:annotate?key=${
+  packageJSON.cloudAPI
+}`;
+const translateApi = `https://translation.googleapis.com/language/translate/v2?key=${
+  packageJSON.cloudAPI
+}`;
+
+export const getTranslatedText = async (targetLanguage, image64) => {
   const response = await axios.post(cloudVision, {
     requests: [
       {
@@ -33,8 +37,9 @@ export const getTranslatedText = async (
     try {
       const translationResponse = await axios.post(translateApi, {
         q: captureText,
-        target: self.state.targetLanguage,
+        target: targetLanguage,
       });
+      // console.warn(targetLanguage, translationResponse);
       return translationResponse.data.data.translations[0].translatedText;
     } catch (ex) {
       // show the text without translation
@@ -45,4 +50,14 @@ export const getTranslatedText = async (
       // });
     }
   }
+};
+
+export const getFilteredResult = async (
+  cloudVision,
+  targetLanguage,
+  image64,
+  ingredients,
+) => {
+  const res = await getTranslatedText(cloudVision, targetLanguage, image64);
+  return;
 };
