@@ -29,6 +29,7 @@ class MainScreen extends Component {
       ingredients,
       languages,
       renderScreen: 'main',
+      stopCamera: false,
     };
   }
   lookByPrice = () => {
@@ -62,7 +63,7 @@ class MainScreen extends Component {
   };
 
   takePicture = async (isX = false) => {
-    if (this.camera) {
+    if (this.camera && !this.state.stopCamera) {
       const image64 = await this.camera.capture();
       let captureText;
       if (isX) {
@@ -77,7 +78,7 @@ class MainScreen extends Component {
         );
       }
 
-      if (captureText) {
+      if (captureText && !this.state.stopCamera) {
         this.setState({ captureText });
       }
     }
@@ -91,6 +92,16 @@ class MainScreen extends Component {
             this.camera = cam;
           }}
         >
+          <Button
+            onPress={() => {
+              this.setState(prevState => ({
+                stopCamera: !prevState.stopCamera,
+              }));
+            }}
+            title={this.state.stopCamera ? 'Search again' : 'Capture'}
+            color="#841584"
+          />
+
           <Button
             onPress={() => {
               this.setState({ renderScreen: 'main' });
