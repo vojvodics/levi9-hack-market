@@ -16,8 +16,8 @@ export const ingredients = [
   { name: 'Hazelnut' },
   { name: 'Meat' },
   { name: 'Milk' },
-  { name: 'soya' },
   { name: 'Penaut' },
+  { name: 'soya' },
 ];
 
 class MainScreen extends Component {
@@ -32,7 +32,7 @@ class MainScreen extends Component {
     };
   }
   lookByPrice = () => {
-    this.setState({ renderScreen: 'camera' });
+    this.setState({ renderScreen: 'camera', captureText: '' });
     this.intervalId = setInterval(() => this.takePicture(true), 1000);
   };
 
@@ -41,7 +41,7 @@ class MainScreen extends Component {
   }
 
   lookForIngredients = () => {
-    this.setState({ renderScreen: 'camera' });
+    this.setState({ renderScreen: 'camera', captureText: '' });
     this.intervalId = setInterval(() => this.takePicture(), 1000);
   };
 
