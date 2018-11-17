@@ -1,5 +1,8 @@
+import React from 'react';
+
 import axios from 'axios';
 import packageJSON from '../package.json';
+import { Text } from 'react-native';
 
 const cloudVision = `https://vision.googleapis.com/v1/images:annotate?key=${
   packageJSON.cloudAPI
@@ -38,12 +41,13 @@ export const getTranslatedText = async (targetLanguage, image64) => {
       const translationResponse = await axios.post(translateApi, {
         q: captureText,
         target: targetLanguage,
+        cloudVision,
       });
       // console.warn(targetLanguage, translationResponse);
       return translationResponse.data.data.translations[0].translatedText;
     } catch (ex) {
       // show the text without translation
-      return captureText;
+      return '';
       // self.setState({
 
       //   captureText
@@ -53,11 +57,23 @@ export const getTranslatedText = async (targetLanguage, image64) => {
 };
 
 export const getFilteredResult = async (
-  cloudVision,
   targetLanguage,
   image64,
   ingredients,
 ) => {
-  const res = await getTranslatedText(cloudVision, targetLanguage, image64);
-  return;
+  const res = await getTranslatedText(targetLanguage, image64);
+  if (res) {
+    const result = res.split(' ');
+    return result.map((x, i) => (
+      <Text
+        key={x + i}
+        style={{
+          color: ingredients.includes(x.toLowerCase()) ? 'red' : 'white',
+        }}
+      >
+        {x}{' '}
+      </Text>
+    ));
+  }
+  return '';
 };

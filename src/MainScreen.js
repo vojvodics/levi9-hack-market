@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Picker, Button, Switch, Text } from 'react-native';
-import { getTranslatedText } from './AxiosServiceHelper';
+import { getTranslatedText, getFilteredResult } from './AxiosServiceHelper';
+import { getPrices } from './AxiosServiceHelperPrice';
 import Camera from './Camera';
 import Response from './Response';
 
@@ -12,9 +13,11 @@ export const languages = [
 
 export const ingredients = [
   { name: 'Eggs' },
-  { name: 'Hazelnuts' },
+  { name: 'Hazelnut' },
   { name: 'Meat' },
   { name: 'Milk' },
+  { name: 'soya' },
+  { name: 'Penaut' },
 ];
 
 class MainScreen extends Component {
@@ -30,7 +33,7 @@ class MainScreen extends Component {
   }
   lookByPrice = () => {
     this.setState({ renderScreen: 'camera' });
-    this.intervalId = setInterval(() => this.takePicture(), 1000);
+    this.intervalId = setInterval(() => this.takePicture(true), 1000);
   };
 
   componentWillUnmount() {
@@ -58,12 +61,23 @@ class MainScreen extends Component {
     });
   };
 
-  takePicture = async () => {
+  takePicture = async (isX = false) => {
     if (this.camera) {
       const image64 = await this.camera.capture();
-      const captureText = await getTranslatedText(this.state.language, image64);
+      let captureText;
+      if (isX) {
+        captureText = await getPrices(this.state.language, image64);
+      } else {
+        captureText = await getFilteredResult(
+          this.state.language,
+          image64,
+          this.state.ingredients
+            .filter(x => x.checked)
+            .map(({ name }) => name.toLowerCase()),
+        );
+      }
 
-      if (!this.state.done) {
+      if (captureText) {
         this.setState({ captureText });
       }
     }
