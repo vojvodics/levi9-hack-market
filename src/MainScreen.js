@@ -12,6 +12,7 @@ export const languages = [
 ];
 
 export const ingredients = [
+  { name: 'Corn' },
   { name: 'Eggs' },
   { name: 'Hazelnut' },
   { name: 'Meat' },
