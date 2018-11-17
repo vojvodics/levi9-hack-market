@@ -17,7 +17,8 @@ export const ingredients = [
   { name: 'Meat' },
   { name: 'Milk' },
   { name: 'Penaut' },
-  { name: 'soya' },
+  { name: 'Soya' },
+  { name: 'Water' },
 ];
 
 class MainScreen extends Component {
